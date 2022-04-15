@@ -4,7 +4,6 @@ import "gorm.io/gorm"
 
 type Post struct {
 	gorm.Model
-	ID    uint   `json:"id"`
-	Title string `json:"title"`
-	Body  string `json:"body"`
+	Title string `json:"title" gorm:"unique;not null;index"`
+	Body  string `json:"body" gorm:"not null"`
 }
