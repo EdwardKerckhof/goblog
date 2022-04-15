@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 
@@ -18,7 +17,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("error loading app.env file: %s", err.Error())
 	}
-	fmt.Println(config.ApiPort)
 
 	db := storage.NewPostgresConnection(config)
 

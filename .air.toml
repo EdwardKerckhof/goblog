@@ -1,0 +1,18 @@
+root = "." 
+tmp_dir = "tmp"
+
+[build]
+cmd = "make build-tmp"
+bin = "tmp/goblog"
+
+full_bin = "./tmp/goblog"
+log = "air_errors.log"
+include_ext = ["go", "yaml"]
+exclude_dir = ["tmp"]
+delay = 500 # ms
+
+[log]
+time = true
+
+[misc]
+clean_on_exit = true
