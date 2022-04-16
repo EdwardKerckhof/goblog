@@ -28,16 +28,17 @@ func NewHTTPHandler(postService ports.PostService) PostHandler {
 // Get gets a post using the service
 func (h *PostHandlerImpl) Get(w http.ResponseWriter, r *http.Request) {
 	param := mux.Vars(r)["id"]
-	id, err := strconv.ParseUint(param, 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
+	id, _ := strconv.ParseUint(param, 10, 64)
+
+	arg := GetOneParams{
+		PostID: uint(id),
 	}
-	post, err := h.postService.Get(uint(id))
+
+	post, err := h.postService.Get(arg.PostID)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	responses.JSON(w, http.StatusOK, post)
+	responses.JSON(w, http.StatusOK, CreatePostResponse(post))
 }

@@ -17,7 +17,7 @@ type Config struct {
 // LoadConfig reads in an env file and loads into a config struct
 func LoadConfig(path string) (config *Config, err error) {
 	viper.AddConfigPath(path)
-	viper.SetConfigName("app")
+	viper.SetConfigName("api")
 	viper.SetConfigType("env")
 
 	viper.AutomaticEnv()

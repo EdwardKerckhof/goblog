@@ -12,7 +12,7 @@ func main() {
 	// load environment variables
 	config, err := configs.LoadConfig("./configs")
 	if err != nil {
-		log.Fatalf("error loading app.env file: %s", err.Error())
+		log.Fatalf("error loading .env file: %s", err.Error())
 	}
 
 	// setup app storage

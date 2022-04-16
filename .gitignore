@@ -6,7 +6,8 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-api/configs/app.env
+api/configs/api.env
+api/configs/.env
 api/tmp
 #
 ### Go ###
