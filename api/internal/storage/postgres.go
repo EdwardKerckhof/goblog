@@ -11,6 +11,7 @@ import (
 	"github.com/edwardkerckhof/goblog/internal/core/ports"
 )
 
+// NewPostgresConnection creates a new connection to a postgres database using GORM
 func NewPostgresConnection(config *configs.Config) *gorm.DB {
 	connectionInfo := ports.DBConnection{
 		Host:     config.DBHost,

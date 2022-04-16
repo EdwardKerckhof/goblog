@@ -15,14 +15,17 @@ func NewPostService(repo ports.PostRepository) ports.PostService {
 	}
 }
 
+// Gets one post from the repository
 func (s *service) Get(postID uint) (*domain.Post, error) {
 	return s.repo.Get(postID)
 }
 
+// Gets all posts from the repository
 func (s *service) GetAll() ([]*domain.Post, error) {
 	return s.repo.GetAll()
 }
 
+// Creates a new post in the repository
 func (s *service) Create(post *domain.Post) (uint, error) {
 	return s.repo.Create(post)
 }

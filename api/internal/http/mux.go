@@ -20,6 +20,7 @@ type muxRouter struct {
 	muxRouter *mux.Router
 }
 
+// Creates a new Mux HTTP router
 func NewMuXRouter(config *configs.Config) ports.HTTPRouter {
 	url = fmt.Sprintf("/api/v%s", config.ApiVersion)
 	return &muxRouter{
@@ -28,26 +29,32 @@ func NewMuXRouter(config *configs.Config) ports.HTTPRouter {
 	}
 }
 
+// Get routes
 func (r *muxRouter) GET(uri string, f func(w http.ResponseWriter, req *http.Request)) {
 	r.muxRouter.PathPrefix(url).Subrouter().HandleFunc(uri, f).Methods(http.MethodGet)
 }
 
+// Post routes
 func (r *muxRouter) POST(uri string, f func(w http.ResponseWriter, req *http.Request)) {
 	r.muxRouter.PathPrefix(url).Subrouter().HandleFunc(uri, f).Methods(http.MethodPost)
 }
 
+// Put routes
 func (r *muxRouter) PUT(uri string, f func(w http.ResponseWriter, req *http.Request)) {
 	r.muxRouter.PathPrefix(url).Subrouter().HandleFunc(uri, f).Methods(http.MethodPut)
 }
 
+// Delete routes
 func (r *muxRouter) DELETE(uri string, f func(w http.ResponseWriter, req *http.Request)) {
 	r.muxRouter.PathPrefix(url).Subrouter().HandleFunc(uri, f).Methods(http.MethodDelete)
 }
 
+// Serves HTTP requests
 func (r *muxRouter) SERVEHTTP(w http.ResponseWriter, req *http.Request) {
 	r.muxRouter.ServeHTTP(w, req)
 }
 
+// Serves HTTP router
 func (r *muxRouter) SERVE(port string) {
 	// CORS
 	corsHeaders := handlers.AllowedHeaders([]string{"X-Requested-With"})

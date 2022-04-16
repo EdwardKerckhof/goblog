@@ -11,6 +11,7 @@ type errorResponse struct {
 	Code  int    `json:"code"`
 }
 
+// JSON returns a JSON HTTP response
 func JSON(w http.ResponseWriter, statusCode int, val interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
@@ -19,6 +20,7 @@ func JSON(w http.ResponseWriter, statusCode int, val interface{}) {
 	}
 }
 
+// ERROR returns a JSON HTTP Error response
 func ERROR(w http.ResponseWriter, statusCode int, err error) {
 	if err != nil {
 		JSON(w, statusCode, errorResponse{

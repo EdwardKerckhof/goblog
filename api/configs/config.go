@@ -14,6 +14,7 @@ type Config struct {
 	DBName            string `mapstructure:"DB_NAME"`
 }
 
+// LoadConfig reads in an env file and loads into a config struct
 func LoadConfig(path string) (config *Config, err error) {
 	viper.AddConfigPath(path)
 	viper.SetConfigName("app")

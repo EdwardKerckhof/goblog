@@ -4,21 +4,24 @@ import (
 	"strconv"
 
 	"github.com/edwardkerckhof/goblog/configs"
-	"github.com/edwardkerckhof/goblog/internal/core/ports"
+	postHandler "github.com/edwardkerckhof/goblog/internal/handlers/post"
 	rest "github.com/edwardkerckhof/goblog/internal/http"
 )
 
 type Server struct {
 	config      *configs.Config
-	postHandler ports.PostHandler
+	postHandler postHandler.PostHandler
 }
 
-func NewServer(postHandler ports.PostHandler) *Server {
+// NewServer creates a new HTTP server
+func NewServer(config *configs.Config, postHandler postHandler.PostHandler) *Server {
 	return &Server{
+		config:      config,
 		postHandler: postHandler,
 	}
 }
 
+// Start creates a new REST router and serves the application
 func (s *Server) Start() {
 	router := rest.NewMuXRouter(s.config)
 
