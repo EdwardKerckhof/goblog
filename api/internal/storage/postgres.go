@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/edwardkerckhof/goblog/configs"
+	"github.com/edwardkerckhof/goblog/internal/core/domain"
 	"github.com/edwardkerckhof/goblog/internal/core/ports"
 )
 
@@ -27,6 +28,8 @@ func NewPostgresConnection(config *configs.Config) *gorm.DB {
 	} else {
 		fmt.Printf("database connection succeeded\n")
 	}
+
+	db.AutoMigrate(&domain.Post{})
 
 	pgDB, _ := db.DB()
 	err = pgDB.Ping()

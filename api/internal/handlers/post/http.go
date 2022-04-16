@@ -1,10 +1,12 @@
 package post_handler
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"gorm.io/gorm"
 
 	"github.com/edwardkerckhof/goblog/internal/core/ports"
 	responses "github.com/edwardkerckhof/goblog/pkg/utils"
@@ -30,12 +32,16 @@ func (h *PostHandlerImpl) Get(w http.ResponseWriter, r *http.Request) {
 	param := mux.Vars(r)["id"]
 	id, _ := strconv.ParseUint(param, 10, 64)
 
-	arg := GetOneParams{
+	arg := GetOnePostParams{
 		PostID: uint(id),
 	}
 
 	post, err := h.postService.Get(arg.PostID)
-	if err != nil {
+	switch {
+	case errors.Is(err, gorm.ErrRecordNotFound):
+		responses.ERROR(w, http.StatusNotFound, err)
+		return
+	case err != nil:
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}

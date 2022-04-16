@@ -17,11 +17,7 @@ func NewPostService(repo ports.PostRepository) ports.PostService {
 
 // Gets one post from the repository
 func (s *service) Get(postID uint) (*domain.Post, error) {
-	post, err := s.repo.Get(postID)
-	if err != nil {
-		return &domain.Post{}, err
-	}
-	return post, nil
+	return s.repo.Get(postID)
 }
 
 // Gets all posts from the repository
@@ -30,6 +26,6 @@ func (s *service) GetAll() ([]*domain.Post, error) {
 }
 
 // Creates a new post in the repository
-func (s *service) Create(post *domain.Post) (uint, error) {
+func (s *service) Create(post *domain.Post) (*domain.Post, error) {
 	return s.repo.Create(post)
 }

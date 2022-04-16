@@ -11,17 +11,17 @@ type GetAllParams struct {
 	Offset uint `json:"offset"`
 }
 
-// GetOneParams arameters
-// swagger:parameters GetOneParams
-type GetOneParams struct {
+// GetOnePostParams arameters
+// swagger:parameters GetOnePostParams
+type GetOnePostParams struct {
 	// in: path
 	// required: true
 	PostID uint `json:"id"`
 }
 
-// CreateParams parameters
-// swagger:parameters CreateParams
-type CreateParams struct {
+// CreatePostParams parameters
+// swagger:parameters CreatePostParams
+type CreatePostParams struct {
 	// in: body
 	// required: true
 	Body struct {
@@ -30,17 +30,17 @@ type CreateParams struct {
 	}
 }
 
-// DeleteParams arameters
-// swagger:parameters DeleteParams
-type DeleteParams struct {
+// DeletePostParams arameters
+// swagger:parameters DeletePostParams
+type DeletePostParams struct {
 	// in: path
 	// required: true
 	PostID uint `json:"id"`
 }
 
-// UpdateParams parameters
-// swagger:parameters UpdateParams
-type UpdateParams struct {
+// UpdatePostParams parameters
+// swagger:parameters UpdatePostParams
+type UpdatePostParams struct {
 	// in: path
 	// required: true
 	PostId uint `json:"id"`

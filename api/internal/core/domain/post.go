@@ -9,3 +9,7 @@ type Post struct {
 	Title string `json:"title" gorm:"unique;not null;index"`
 	Body  string `json:"body" gorm:"not null"`
 }
+
+func (p *Post) TableName() string {
+	return "posts"
+}

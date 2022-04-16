@@ -14,5 +14,6 @@ type DBConnection struct {
 type PostRepository interface {
 	Get(postID uint) (*domain.Post, error)
 	GetAll() ([]*domain.Post, error)
-	Create(post *domain.Post) (uint, error)
+	Create(post *domain.Post) (*domain.Post, error)
+	Delete(post *domain.Post)
 }

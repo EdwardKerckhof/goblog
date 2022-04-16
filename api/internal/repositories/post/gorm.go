@@ -20,21 +20,24 @@ func NewGormRepository(db *gorm.DB) ports.PostRepository {
 
 // Gets a post using GORM
 func (r *repository) Get(postID uint) (*domain.Post, error) {
-	var post domain.Post
-	if err := r.db.First(&post, postID).Error; err != nil {
-		return nil, err
-	}
-
-	return &post, nil
+	var post *domain.Post
+	err := r.db.First(&post, postID).Error
+	return post, err
 }
 
 // Gets all posts using GORM
 func (r *repository) GetAll() ([]*domain.Post, error) {
-	return []*domain.Post{}, nil
+	var posts []*domain.Post
+	err := r.db.Find(&posts).Error
+	return posts, err
 }
 
 // Creates a post using GORM
-func (r *repository) Create(post *domain.Post) (uint, error) {
-	result := r.db.Create(&post)
-	return post.ID, result.Error
+func (r *repository) Create(post *domain.Post) (*domain.Post, error) {
+	err := r.db.Create(&post).Error
+	return post, err
+}
+
+func (r *repository) Delete(post *domain.Post) {
+	r.db.Delete(&post)
 }
