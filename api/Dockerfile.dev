@@ -4,10 +4,9 @@ FROM golang:1.18.0-stretch AS build
 RUN apt update && apt upgrade -y && \
     apt install -y git make openssh-client
 
+WORKDIR /apps/goblog/api
 
-WORKDIR /apps/blog/api
-
-COPY .env /apps/blog
+COPY .env /apps/goblog
 
 RUN curl -fLo install.sh https://raw.githubusercontent.com/cosmtrek/air/master/install.sh \
     && chmod +x install.sh && sh install.sh && cp ./bin/air /bin/air

@@ -1,7 +1,7 @@
 .PHONY: build-tmp check_swagger_installation swagger createmigration
 
 build-tmp:
-	go build -o ./tmp/goblog .
+	go build -o ./tmp/goblog ./cmd/httpserver
 
 check_swagger_installation:
 	which swagger || GO111MODULE=off go get -u github.com/go-swagger/go-swagger/cmd/swagger
