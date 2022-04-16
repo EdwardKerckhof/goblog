@@ -10,17 +10,21 @@ import (
 	responses "github.com/edwardkerckhof/goblog/pkg/utils"
 )
 
-type handler struct {
+type PostHandler interface {
+	Get(w http.ResponseWriter, r *http.Request)
+}
+
+type PostHandlerImpl struct {
 	postService ports.PostService
 }
 
-func NewHTTPHandler(postService ports.PostService) ports.PostHandler {
-	return &handler{
+func NewHTTPHandler(postService ports.PostService) PostHandler {
+	return &PostHandlerImpl{
 		postService: postService,
 	}
 }
 
-func (h *handler) Get(w http.ResponseWriter, r *http.Request) {
+func (h *PostHandlerImpl) Get(w http.ResponseWriter, r *http.Request) {
 	param := mux.Vars(r)["id"]
 	id, err := strconv.ParseUint(param, 10, 64)
 	if err != nil {

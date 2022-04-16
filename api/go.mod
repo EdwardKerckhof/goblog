@@ -3,6 +3,7 @@ module github.com/edwardkerckhof/goblog
 go 1.18
 
 require (
+	github.com/google/wire v0.5.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/spf13/viper v1.11.0
