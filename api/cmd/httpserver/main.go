@@ -2,13 +2,12 @@ package main
 
 import (
 	"log"
-	"strconv"
 
 	"github.com/edwardkerckhof/goblog/configs"
 	postService "github.com/edwardkerckhof/goblog/internal/core/services/post"
 	postHandler "github.com/edwardkerckhof/goblog/internal/handlers/post"
-	rest "github.com/edwardkerckhof/goblog/internal/http"
 	postRepository "github.com/edwardkerckhof/goblog/internal/repositories/post"
+	"github.com/edwardkerckhof/goblog/internal/server"
 	"github.com/edwardkerckhof/goblog/internal/storage"
 )
 
@@ -25,8 +24,8 @@ func main() {
 	postService := postService.NewPostService(postRepo)
 	postHandler := postHandler.NewHTTPHandler(postService)
 
-	router := rest.NewMuXRouter(config)
-	router.GET("/posts/{id:[0-9]+}", postHandler.Get)
-
-	router.SERVE(":" + strconv.Itoa(config.ApiPort))
+	httpServer := server.NewServer(
+		postHandler,
+	)
+	httpServer.Start()
 }

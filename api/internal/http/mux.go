@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -61,5 +62,7 @@ func (r *muxRouter) SERVE(port string) {
 	r.muxRouter.Use(handlers.RecoveryHandler(handlers.PrintRecoveryStack(true)))
 
 	fmt.Printf("Mux HTTP server running on port %s with prefix: %s\n", port, url)
-	http.ListenAndServe(port, r.muxRouter)
+	if err := http.ListenAndServe(port, r.muxRouter); err != nil {
+		log.Fatal(err)
+	}
 }

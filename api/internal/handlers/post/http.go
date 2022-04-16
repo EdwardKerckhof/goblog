@@ -10,15 +10,11 @@ import (
 	responses "github.com/edwardkerckhof/goblog/pkg/utils"
 )
 
-type HTTPHandler interface {
-	Get(w http.ResponseWriter, r *http.Request)
-}
-
 type handler struct {
 	postService ports.PostService
 }
 
-func NewHTTPHandler(postService ports.PostService) HTTPHandler {
+func NewHTTPHandler(postService ports.PostService) ports.PostHandler {
 	return &handler{
 		postService: postService,
 	}
