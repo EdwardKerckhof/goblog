@@ -47,7 +47,7 @@ func (s *Suite) SetupSuite() {
 		log.New(os.Stdout, "\r\n", log.LstdFlags),
 		logger.Config{
 			SlowThreshold:             time.Second,
-			LogLevel:                  logger.Info,
+			LogLevel:                  logger.Error,
 			IgnoreRecordNotFoundError: false,
 			Colorful:                  true,
 		},
@@ -134,10 +134,11 @@ func (s *Suite) Test_repository_Create() {
 }
 
 func (s *Suite) Test_repository_Delete() {
-	updateQuery := `UPDATE "posts" SET "deleted_at"=$1 WHERE "posts"."id" = $2`
+	softDeleteQuery := `UPDATE "posts" SET "deleted_at"=$1 WHERE "posts"."id" = $2`
 
 	s.mock.ExpectBegin()
-	s.mock.ExpectExec(regexp.QuoteMeta(updateQuery)).
+	s.mock.ExpectExec(regexp.QuoteMeta(softDeleteQuery)).
+		WithArgs(time.Now(), s.post.ID).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	s.mock.ExpectCommit()
 
