@@ -17,6 +17,7 @@ import (
 
 	"github.com/edwardkerckhof/goblog/internal/core/domain"
 	"github.com/edwardkerckhof/goblog/internal/core/ports"
+	responses "github.com/edwardkerckhof/goblog/pkg/utils"
 )
 
 type Suite struct {
@@ -133,16 +134,36 @@ func (s *Suite) Test_repository_Create() {
 	requireEqual(s.T(), s.post, res)
 }
 
+func (s *Suite) Test_repository_Update() {
+	postToUpdate := *s.post
+	postToUpdate.Title = "Updated title"
+	postToUpdate.Body = "Updated body"
+
+	s.mock.ExpectBegin()
+	s.mock.ExpectExec("UPDATE").
+		WithArgs(postToUpdate.CreatedAt, responses.AnyTime{}, gorm.DeletedAt{}, postToUpdate.Title, postToUpdate.Body, postToUpdate.ID).
+		WillReturnResult(sqlmock.NewResult(0, 1))
+	s.mock.ExpectCommit()
+
+	res, err := s.repository.Update(&postToUpdate)
+	require.NoError(s.T(), err)
+	require.NotNil(s.T(), res)
+
+	requireEqual(s.T(), &postToUpdate, res)
+}
+
 func (s *Suite) Test_repository_Delete() {
+	postToDelete := *s.post
+	postToDelete.ID = 2
 	softDeleteQuery := `UPDATE "posts" SET "deleted_at"=$1 WHERE "posts"."id" = $2`
 
 	s.mock.ExpectBegin()
 	s.mock.ExpectExec(regexp.QuoteMeta(softDeleteQuery)).
-		WithArgs(time.Now(), s.post.ID).
+		WithArgs(responses.AnyTime{}, postToDelete.ID).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	s.mock.ExpectCommit()
 
-	s.repository.Delete(s.post)
+	s.repository.Delete(&postToDelete)
 }
 
 func requireEqual(t *testing.T, post *domain.Post, res *domain.Post) {

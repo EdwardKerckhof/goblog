@@ -38,6 +38,13 @@ func (r *repository) Create(post *domain.Post) (*domain.Post, error) {
 	return post, err
 }
 
-func (r *repository) Delete(post *domain.Post) {
-	r.db.Delete(&post)
+// Updates a post using GORM
+func (r *repository) Update(post *domain.Post) (*domain.Post, error) {
+	err := r.db.Save(&post).Error
+	return post, err
+}
+
+// Deletes a post using GORM
+func (r *repository) Delete(post *domain.Post) error {
+	return r.db.Delete(&post).Error
 }
