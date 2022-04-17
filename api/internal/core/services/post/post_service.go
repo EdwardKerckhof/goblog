@@ -29,3 +29,13 @@ func (s *service) GetAll() ([]*domain.Post, error) {
 func (s *service) Create(post *domain.Post) (*domain.Post, error) {
 	return s.repo.Create(post)
 }
+
+// Updates a post in the repository
+func (s *service) Update(post *domain.Post) (*domain.Post, error) {
+	return s.repo.Update(post)
+}
+
+// Soft deletes a post in the repository
+func (s *service) Delete(post *domain.Post) error {
+	return s.repo.Delete(post)
+}

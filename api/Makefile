@@ -11,3 +11,6 @@ swagger: check_swagger_installation
 
 test:
 	go test -v -race -cover ./...
+
+mock-repos:
+	mockgen -source=internal/core/ports/repositories.go -destination=mocks/repositories/mock.go -package=repositories_mock
