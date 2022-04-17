@@ -56,6 +56,17 @@ func (s *Suite) SetupSuite() {
 	require.NoError(s.T(), err)
 
 	s.repository = NewGormRepository(s.DB)
+
+	s.post = &domain.Post{
+		Model: gorm.Model{
+			ID:        1,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+			DeletedAt: gorm.DeletedAt{},
+		},
+		Title: "Test title",
+		Body:  "Test Body",
+	}
 }
 
 func (s *Suite) AfterTest(_, _ string) {
@@ -66,39 +77,28 @@ func TestInit(t *testing.T) {
 	suite.Run(t, new(Suite))
 }
 
-var post = domain.Post{
-	Model: gorm.Model{
-		ID:        1,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		DeletedAt: gorm.DeletedAt{},
-	},
-	Title: "Test title",
-	Body:  "Test Body",
-}
-
 func (s *Suite) Test_repository_Get() {
 	query := `SELECT * FROM "posts" WHERE "posts"."id" = $1`
 
 	rows := s.mock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "title", "body"}).
-		AddRow(post.ID, post.CreatedAt, post.UpdatedAt, post.DeletedAt, post.Title, post.Body)
+		AddRow(s.post.ID, s.post.CreatedAt, s.post.UpdatedAt, s.post.DeletedAt, s.post.Title, s.post.Body)
 
 	s.mock.ExpectQuery(regexp.QuoteMeta(query)).
-		WithArgs(post.ID).
+		WithArgs(s.post.ID).
 		WillReturnRows(rows)
 
-	res, err := s.repository.Get(post.ID)
+	res, err := s.repository.Get(s.post.ID)
 	require.NoError(s.T(), err)
 	require.NotNil(s.T(), res)
 
-	requireEqual(s.T(), post, res)
+	requireEqual(s.T(), s.post, res)
 }
 
 func (s *Suite) Test_repository_GetAll() {
 	query := `SELECT * FROM "posts"`
 
 	rows := s.mock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "title", "body"}).
-		AddRow(post.ID, post.CreatedAt, post.UpdatedAt, post.DeletedAt, post.Title, post.Body)
+		AddRow(s.post.ID, s.post.CreatedAt, s.post.UpdatedAt, s.post.DeletedAt, s.post.Title, s.post.Body)
 
 	s.mock.ExpectQuery(regexp.QuoteMeta(query)).
 		WillReturnRows(rows)
@@ -107,7 +107,7 @@ func (s *Suite) Test_repository_GetAll() {
 	require.NoError(s.T(), err)
 	require.NotNil(s.T(), res)
 
-	requireEquals(s.T(), post, res)
+	requireEquals(s.T(), s.post, res)
 }
 
 func (s *Suite) Test_repository_Create() {
@@ -118,19 +118,19 @@ func (s *Suite) Test_repository_Create() {
 	`
 
 	rows := s.mock.NewRows([]string{"id"}).
-		AddRow(post.ID)
+		AddRow(s.post.ID)
 
 	s.mock.ExpectBegin()
 	s.mock.ExpectQuery(regexp.QuoteMeta(query)).
-		WithArgs(post.CreatedAt, post.UpdatedAt, post.DeletedAt, post.Title, post.Body, post.ID).
+		WithArgs(s.post.CreatedAt, s.post.UpdatedAt, s.post.DeletedAt, s.post.Title, s.post.Body, s.post.ID).
 		WillReturnRows(rows)
 	s.mock.ExpectCommit()
 
-	res, err := s.repository.Create(&post)
+	res, err := s.repository.Create(s.post)
 	require.NoError(s.T(), err)
 	require.NotNil(s.T(), res)
 
-	requireEqual(s.T(), post, res)
+	requireEqual(s.T(), s.post, res)
 }
 
 func (s *Suite) Test_repository_Delete() {
@@ -141,10 +141,10 @@ func (s *Suite) Test_repository_Delete() {
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	s.mock.ExpectCommit()
 
-	s.repository.Delete(&post)
+	s.repository.Delete(s.post)
 }
 
-func requireEqual(t *testing.T, post domain.Post, res *domain.Post) {
+func requireEqual(t *testing.T, post *domain.Post, res *domain.Post) {
 	require.Equal(t, post.ID, res.ID)
 	require.Equal(t, post.Body, res.Body)
 	require.Equal(t, post.Title, res.Title)
@@ -153,7 +153,7 @@ func requireEqual(t *testing.T, post domain.Post, res *domain.Post) {
 	require.Equal(t, post.DeletedAt, res.DeletedAt)
 }
 
-func requireEquals(t *testing.T, post domain.Post, res []*domain.Post) {
+func requireEquals(t *testing.T, post *domain.Post, res []*domain.Post) {
 	for _, result := range res {
 		requireEqual(t, post, result)
 	}
