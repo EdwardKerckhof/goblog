@@ -17,7 +17,7 @@ import (
 
 	"github.com/edwardkerckhof/goblog/internal/core/domain"
 	"github.com/edwardkerckhof/goblog/internal/core/ports"
-	responses "github.com/edwardkerckhof/goblog/pkg/utils"
+	"github.com/edwardkerckhof/goblog/pkg/utils"
 )
 
 type Suite struct {
@@ -141,7 +141,7 @@ func (s *Suite) Test_repository_Update() {
 
 	s.mock.ExpectBegin()
 	s.mock.ExpectExec("UPDATE").
-		WithArgs(postToUpdate.CreatedAt, responses.AnyTime{}, gorm.DeletedAt{}, postToUpdate.Title, postToUpdate.Body, postToUpdate.ID).
+		WithArgs(postToUpdate.CreatedAt, utils.AnyTime{}, gorm.DeletedAt{}, postToUpdate.Title, postToUpdate.Body, postToUpdate.ID).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	s.mock.ExpectCommit()
 
@@ -159,7 +159,7 @@ func (s *Suite) Test_repository_Delete() {
 
 	s.mock.ExpectBegin()
 	s.mock.ExpectExec(regexp.QuoteMeta(softDeleteQuery)).
-		WithArgs(responses.AnyTime{}, postToDelete.ID).
+		WithArgs(utils.AnyTime{}, postToDelete.ID).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	s.mock.ExpectCommit()
 
