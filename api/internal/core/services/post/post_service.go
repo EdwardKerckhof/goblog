@@ -21,8 +21,8 @@ func (s *service) Get(postID uint) (*domain.Post, error) {
 }
 
 // Gets all posts from the repository
-func (s *service) GetAll() ([]*domain.Post, error) {
-	return s.repo.GetAll()
+func (s *service) GetAll(offset int) ([]*domain.Post, error) {
+	return s.repo.GetAll(offset)
 }
 
 // Creates a new post in the repository

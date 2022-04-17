@@ -30,6 +30,7 @@ func (s *Server) setupRouter() {
 	router := rest.NewMuXRouter(s.config)
 
 	router.GET("/posts/{id:[0-9]+}", s.postHandler.Get)
+	router.GET("/posts", s.postHandler.GetAll)
 
 	s.Router = router
 }

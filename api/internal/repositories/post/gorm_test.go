@@ -104,7 +104,7 @@ func (s *Suite) Test_repository_GetAll() {
 	s.mock.ExpectQuery(regexp.QuoteMeta(query)).
 		WillReturnRows(rows)
 
-	res, err := s.repository.GetAll()
+	res, err := s.repository.GetAll(0)
 	require.NoError(s.T(), err)
 	require.NotNil(s.T(), res)
 

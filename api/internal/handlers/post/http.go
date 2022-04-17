@@ -14,6 +14,7 @@ import (
 
 type PostHandler interface {
 	Get(w http.ResponseWriter, r *http.Request)
+	GetAll(w http.ResponseWriter, r *http.Request)
 }
 
 type PostHandlerImpl struct {
@@ -47,4 +48,24 @@ func (h *PostHandlerImpl) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responses.JSON(w, http.StatusOK, CreatePostResponse(post))
+}
+
+// Get gets all posts using the service
+func (h *PostHandlerImpl) GetAll(w http.ResponseWriter, r *http.Request) {
+	arg := GetAllPostParams{
+		Offset: 0,
+	}
+
+	offsetQ := r.URL.Query().Get("offset")
+	if offset, offsetErr := strconv.ParseInt(offsetQ, 10, 32); offsetErr == nil {
+		arg.Offset = int(offset)
+	}
+
+	posts, err := h.postService.GetAll(arg.Offset)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, CreatePostsResponse(posts))
 }

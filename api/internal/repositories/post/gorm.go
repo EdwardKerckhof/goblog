@@ -26,9 +26,9 @@ func (r *repository) Get(postID uint) (*domain.Post, error) {
 }
 
 // Gets all posts using GORM
-func (r *repository) GetAll() ([]*domain.Post, error) {
+func (r *repository) GetAll(offset int) ([]*domain.Post, error) {
 	var posts []*domain.Post
-	err := r.db.Find(&posts).Error
+	err := r.db.Find(&posts).Offset(offset).Limit(50).Error
 	return posts, err
 }
 

@@ -2,13 +2,11 @@ package post_handler
 
 import "time"
 
-// GetAllParams  parameters
-// swagger:parameters GetAllParams
-type GetAllParams struct {
+// GetAllPostParams  parameters
+// swagger:parameters GetAllPostParams
+type GetAllPostParams struct {
 	// in: query
-	Limit uint `json:"limit"`
-	// in: query
-	Offset uint `json:"offset"`
+	Offset int `json:"offset"`
 }
 
 // GetOnePostParams arameters

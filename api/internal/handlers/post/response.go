@@ -29,7 +29,7 @@ func CreatePostResponse(post *domain.Post) *PostResponse {
 	}
 }
 
-func CreatePostListResponse(posts []*domain.Post) []*PostResponse {
+func CreatePostsResponse(posts []*domain.Post) []*PostResponse {
 	postList := []*PostResponse{}
 	for _, p := range posts {
 		post := CreatePostResponse(p)

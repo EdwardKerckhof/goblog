@@ -80,12 +80,12 @@ func Test_service_GetAll(t *testing.T) {
 			name: "OKReturnsDefault",
 			buildStubs: func(r *repositoriesMock.MockPostRepository) {
 				r.EXPECT().
-					GetAll().
+					GetAll(0).
 					Times(1).
 					Return(posts, nil)
 			},
 			checkResponse: func(t *testing.T, s ports.PostService) {
-				res, err := s.GetAll()
+				res, err := s.GetAll(0)
 				require.NoError(t, err)
 				requireEquals(t, res, posts)
 			},
