@@ -58,8 +58,8 @@ func Test_service_Get(t *testing.T) {
 			r := repositoriesMock.NewMockPostRepository(c)
 			tc.buildStubs(r)
 
-			service := NewPostService(r)
-			tc.checkResponse(t, service)
+			s := NewPostService(r)
+			tc.checkResponse(t, s)
 		})
 	}
 }

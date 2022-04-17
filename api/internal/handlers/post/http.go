@@ -30,7 +30,7 @@ func NewHTTPHandler(postService ports.PostService) PostHandler {
 // Get gets a post using the service
 func (h *PostHandlerImpl) Get(w http.ResponseWriter, r *http.Request) {
 	param := mux.Vars(r)["id"]
-	id, _ := strconv.ParseUint(param, 10, 64)
+	id, _ := strconv.ParseUint(param, 10, 32)
 
 	arg := GetOnePostParams{
 		PostID: uint(id),
