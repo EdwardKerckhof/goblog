@@ -106,6 +106,121 @@ func Test_service_GetAll(t *testing.T) {
 	}
 }
 
+func Test_service_Create(t *testing.T) {
+	post := randomPost()
+
+	testCases := []struct {
+		name          string
+		buildStubs    func(r *repositoriesMock.MockPostRepository)
+		checkResponse func(t *testing.T, s ports.PostService)
+	}{
+		{
+			name: "OKReturnsDefault",
+			buildStubs: func(r *repositoriesMock.MockPostRepository) {
+				r.EXPECT().
+					Create(post).
+					Times(1).
+					Return(post, nil)
+			},
+			checkResponse: func(t *testing.T, s ports.PostService) {
+				res, err := s.Create(post)
+				require.NoError(t, err)
+				requireEqual(t, res, post)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			c := gomock.NewController(t)
+			defer c.Finish()
+
+			r := repositoriesMock.NewMockPostRepository(c)
+			tc.buildStubs(r)
+
+			service := NewPostService(r)
+			tc.checkResponse(t, service)
+		})
+	}
+}
+
+func Test_service_Update(t *testing.T) {
+	post := randomPost()
+	post.Title = "Updated title"
+	post.Body = "Updated body"
+
+	testCases := []struct {
+		name          string
+		buildStubs    func(r *repositoriesMock.MockPostRepository)
+		checkResponse func(t *testing.T, s ports.PostService)
+	}{
+		{
+			name: "OKReturnsDefault",
+			buildStubs: func(r *repositoriesMock.MockPostRepository) {
+				r.EXPECT().
+					Update(post).
+					Times(1).
+					Return(post, nil)
+			},
+			checkResponse: func(t *testing.T, s ports.PostService) {
+				res, err := s.Update(post)
+				require.NoError(t, err)
+				requireEqual(t, res, post)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			c := gomock.NewController(t)
+			defer c.Finish()
+
+			r := repositoriesMock.NewMockPostRepository(c)
+			tc.buildStubs(r)
+
+			service := NewPostService(r)
+			tc.checkResponse(t, service)
+		})
+	}
+}
+
+func Test_service_Delete(t *testing.T) {
+	post := randomPost()
+
+	testCases := []struct {
+		name          string
+		buildStubs    func(r *repositoriesMock.MockPostRepository)
+		checkResponse func(t *testing.T, s ports.PostService)
+	}{
+		{
+			name: "OKReturnsDefault",
+			buildStubs: func(r *repositoriesMock.MockPostRepository) {
+				r.EXPECT().
+					Delete(post).
+					Times(1).
+					Return(nil)
+			},
+			checkResponse: func(t *testing.T, s ports.PostService) {
+				err := s.Delete(post)
+				require.NoError(t, err)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			c := gomock.NewController(t)
+			defer c.Finish()
+
+			r := repositoriesMock.NewMockPostRepository(c)
+			tc.buildStubs(r)
+
+			service := NewPostService(r)
+			tc.checkResponse(t, service)
+		})
+	}
+}
+
 func requireEquals(t *testing.T, results []*domain.Post, posts []*domain.Post) {
 	for i, res := range results {
 		if res != nil && posts[i] != nil {
